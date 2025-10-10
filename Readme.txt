@@ -1,1 +1,1 @@
-This is documantation of this project
+This is documantation of this project.

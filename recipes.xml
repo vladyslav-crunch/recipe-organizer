@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="20.0.1" class="java.beans.XMLDecoder">
+ <object class="java.util.ArrayList">
+  <void method="add">
+   <object class="lab_3.Recipe">
+    <void property="category">
+     <string>Italian</string>
+    </void>
+    <void property="cookingTime">
+     <int>30</int>
+    </void>
+    <void property="name">
+     <string>p</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="lab_3.Recipe">
+    <void property="category">
+     <string>Fast Food</string>
+    </void>
+    <void property="cookingTime">
+     <int>20</int>
+    </void>
+    <void property="name">
+     <string>Burger</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="lab_3.Recipe">
+    <void property="category">
+     <string>Healthy</string>
+    </void>
+    <void property="cookingTime">
+     <int>10</int>
+    </void>
+    <void property="name">
+     <string>Salad</string>
+    </void>
+   </object>
+  </void>
+ </object>
+</java>

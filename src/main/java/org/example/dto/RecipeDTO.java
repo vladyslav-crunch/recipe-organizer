@@ -1,5 +1,6 @@
 package org.example.dto;
 
+import org.example.exeption.InvalidRecipeException;
 import lombok.Data;
 import org.example.entity.*;
 
@@ -26,7 +27,7 @@ public class RecipeDTO {
         return dto;
     }
 
-    public Recipe toEntity(Category category, List<Ingredient> ingredients) {
-        return  Recipe.create(name, description, preparationTime, category, ingredients);
+    public Recipe toEntity(Category category, List<Ingredient> ingredients) throws InvalidRecipeException {
+        return new Recipe(name, description, preparationTime, category, ingredients);
     }
 }

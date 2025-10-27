@@ -1,13 +1,10 @@
 package org.example.entity;
 
+import org.example.exeption.InvalidRecipeException;
 import lombok.*;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Represents a Recipe entity with validation logic and Lombok annotations.
- * Serializable — so it can be easily saved/loaded (e.g., to a file).
- */
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
@@ -21,31 +18,22 @@ public class Recipe implements Serializable {
     private Category category;
     private List<Ingredient> ingredients;
 
-    // Private constructor used internally by factory
-    private Recipe(String name, String description, int preparationTime,
-                   Category category, List<Ingredient> ingredients) {
+    public Recipe(String name, String description, int preparationTime,
+                  Category category, List<Ingredient> ingredients)
+            throws InvalidRecipeException {
+
+        if (name == null || name.isBlank()) {
+            throw new InvalidRecipeException("Nazwa przepisu nie może być pusta");
+        }
+        if (preparationTime <= 0) {
+            throw new InvalidRecipeException("Czas przygotowania musi być dodatni");
+        }
+
         this.name = name;
         this.description = description;
         this.preparationTime = preparationTime;
         this.category = category;
         this.ingredients = ingredients;
-    }
-
-    /**
-     * Static factory method that handles validation internally.
-     * Returns null if validation fails, or the valid Recipe instance.
-     */
-    public static Recipe create(String name, String description, int preparationTime,
-                                Category category, List<Ingredient> ingredients) {
-        if (name == null || name.isBlank()) {
-            System.err.println("Recipe creation failed: name cannot be empty");
-            return null;
-        }
-        if (preparationTime <= 0) {
-            System.err.println("Recipe creation failed: preparation time must be positive");
-            return null;
-        }
-        return new Recipe(name, description, preparationTime, category, ingredients);
     }
 
     @Override

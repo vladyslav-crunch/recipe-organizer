@@ -1,4 +1,4 @@
-package lab_3;
+package org.example.exeption;
 
 public class InvalidRecipeException extends Exception {
     public InvalidRecipeException(String message) {

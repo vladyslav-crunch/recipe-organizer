@@ -25,5 +25,6 @@ CREATE TABLE IF NOT EXISTS recipes (
     description TEXT,
     preparation_time INT NOT NULL,
     category_id INT REFERENCES categories(id),
+    user_id INT REFERENCES users(id),
     active BOOLEAN DEFAULT TRUE
     );

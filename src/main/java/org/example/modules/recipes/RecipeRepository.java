@@ -2,6 +2,7 @@ package org.example.modules.recipes;
 
 import org.example.entity.Recipe;
 import org.example.entity.Category;
+import org.example.entity.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -20,6 +21,11 @@ public class RecipeRepository {
 
     private final RowMapper<Recipe> recipeMapper = (rs, rowNum) -> {
         Category category = new Category(rs.getString("category_name"), rs.getString("category_desc"));
+        User user = new User();
+        user.setId(rs.getInt("user_id"));
+        user.setUsername(rs.getString("user_name"));
+        user.setEmail(rs.getString("user_email"));
+
         Recipe recipe = new Recipe();
         recipe.setName(rs.getString("name"));
         recipe.setDescription(rs.getString("description"));
@@ -42,8 +48,9 @@ public class RecipeRepository {
     }
 
     public int save(Recipe recipe) {
-        String sql = "INSERT INTO recipes (name, description, preparation_time, category_id, active) VALUES (?, ?, ?, ?, TRUE)";
-        return jdbc.update(sql, recipe.getName(), recipe.getDescription(), recipe.getPreparationTime(), 1);
+        String sql = "INSERT INTO recipes (name, description, preparation_time, category_id, user_id, active) VALUES (?, ?, ?, ?, ?, TRUE)";
+        return jdbc.update(sql, recipe.getName(), recipe.getDescription(), recipe.getPreparationTime(), recipe.getCategory() != null /*? recipe.getCategory().getId() : null*/,
+                recipe.getUser() != null ? recipe.getUser().getId() : null);
     }
 
     public int update(int id, Recipe recipe) {

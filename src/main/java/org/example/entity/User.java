@@ -2,6 +2,7 @@ package org.example.entity;
 
 import lombok.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -21,6 +22,8 @@ public class User implements Serializable {
     private String password;
 
     private boolean active = true;
+
+    private List<Recipe> recipes;
 
     @Override
     public String toString() {

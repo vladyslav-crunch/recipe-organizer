@@ -12,15 +12,13 @@ public class Recipe implements Serializable {
 
     @NonNull
     private String name;
-
+    private int id;
     private String description;
     private int preparationTime;
-    private Category category;
     private List<Ingredient> ingredients;
     private User user;
 
-    public Recipe(String name, String description, int preparationTime,
-                  Category category, List<Ingredient> ingredients, User user)
+    public Recipe(String name, String description, int preparationTime, List<Ingredient> ingredients, User user)
             throws InvalidRecipeException {
 
         if (name == null || name.isBlank()) {
@@ -33,7 +31,6 @@ public class Recipe implements Serializable {
         this.name = name;
         this.description = description;
         this.preparationTime = preparationTime;
-        this.category = category;
         this.ingredients = ingredients;
         this.user = user;
     }
@@ -43,7 +40,6 @@ public class Recipe implements Serializable {
         return "Recipe{name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", preparationTime=" + preparationTime + " min" +
-                ", category=" + (category != null ? category.getName() : "brak") +
                 ", ingredients=" + (ingredients != null ? ingredients.size() : 0) +
                 ", user=" + (user != null ? user.getUsername() : "brak") +
                 '}';

@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.entity.User;
 import org.example.exeption.InvalidRecipeException;
 import org.example.entity.Recipe;
 
@@ -38,6 +39,7 @@ public class RecipeXMLService {
         }
 
         List<Recipe> validRecipes = new ArrayList<>();
+        User user1 = new User();
 
         try (XMLDecoder decoder = new XMLDecoder(
                 new BufferedInputStream(new FileInputStream(fileName)))) {
@@ -50,8 +52,8 @@ public class RecipeXMLService {
                             new Recipe(recipe.getName(),
                                     recipe.getDescription(),
                                     recipe.getPreparationTime(),
-                                    recipe.getCategory(),
-                                    recipe.getIngredients());
+                                    recipe.getIngredients(),
+                                    user1);
                             validRecipes.add(recipe);
                         } catch (InvalidRecipeException e) {
                             LOGGER.log(Level.WARNING,

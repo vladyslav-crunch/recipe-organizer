@@ -1,7 +1,6 @@
 package org.example.modules.recipes;
 
 import org.example.entity.Recipe;
-import org.example.entity.Category;
 import org.example.entity.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -20,37 +19,51 @@ public class RecipeRepository {
     }
 
     private final RowMapper<Recipe> recipeMapper = (rs, rowNum) -> {
-        Category category = new Category(rs.getString("category_name"), rs.getString("category_desc"));
         User user = new User();
         user.setId(rs.getInt("user_id"));
         user.setUsername(rs.getString("user_name"));
         user.setEmail(rs.getString("user_email"));
 
         Recipe recipe = new Recipe();
+        recipe.setId(rs.getInt("id"));
         recipe.setName(rs.getString("name"));
         recipe.setDescription(rs.getString("description"));
         recipe.setPreparationTime(rs.getInt("preparation_time"));
-        recipe.setCategory(category);
+        recipe.setUser(user);
         return recipe;
     };
 
     public List<Recipe> findAll() {
-        String sql = "SELECT r.*, c.name AS category_name, c.description AS category_desc " +
-                "FROM recipes r LEFT JOIN categories c ON r.category_id = c.id WHERE r.active = TRUE";
+        String sql = """
+            SELECT r.id, r.name, r.description, r.preparation_time, r.user_id, r.active,
+                   u.username AS user_name, u.email AS user_email
+            FROM recipes r
+            LEFT JOIN users u ON r.user_id = u.id
+            WHERE r.active = TRUE
+            """;
         return jdbc.query(sql, recipeMapper);
     }
 
     public Optional<Recipe> findById(int id) {
-        String sql = "SELECT r.*, c.name AS category_name, c.description AS category_desc " +
-                "FROM recipes r LEFT JOIN categories c ON r.category_id = c.id WHERE r.id = ?";
+        String sql = """
+            SELECT r.id, r.name, r.description, r.preparation_time, r.user_id, r.active,
+                   u.username AS user_name, u.email AS user_email
+            FROM recipes r
+            LEFT JOIN users u ON r.user_id = u.id
+            WHERE r.id = ?
+            """;
         List<Recipe> result = jdbc.query(sql, recipeMapper, id);
         return result.stream().findFirst();
     }
 
     public int save(Recipe recipe) {
-        String sql = "INSERT INTO recipes (name, description, preparation_time, category_id, user_id, active) VALUES (?, ?, ?, ?, ?, TRUE)";
-        return jdbc.update(sql, recipe.getName(), recipe.getDescription(), recipe.getPreparationTime(), recipe.getCategory() != null /*? recipe.getCategory().getId() : null*/,
-                recipe.getUser() != null ? recipe.getUser().getId() : null);
+        String sql = "INSERT INTO recipes (name, description, preparation_time, user_id, active) VALUES (?, ?, ?, ?, TRUE)";
+        return jdbc.update(sql,
+                recipe.getName(),
+                recipe.getDescription(),
+                recipe.getPreparationTime(),
+                recipe.getUser() != null ? recipe.getUser().getId() : null
+        );
     }
 
     public int update(int id, Recipe recipe) {

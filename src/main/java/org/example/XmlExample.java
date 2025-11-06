@@ -19,13 +19,14 @@ public class XmlExample {
         Ingredient lettuce = new Ingredient("Lettuce", 200, "g");
 
         List<Recipe> recipes = new ArrayList<>();
+        User user1 = new User();
         try {
-            recipes.add(new Recipe("Pizza", "Classic Margherita", 25, italian,
-                    new ArrayList<>(List.of(cheese, dough))));
-            recipes.add(new Recipe("Burger", "Cheeseburger", 20, fastFood,
-                    new ArrayList<>(List.of(cheese, lettuce))));
-            recipes.add(new Recipe("Salad", "Fresh salad", 10, healthy,
-                    new ArrayList<>(List.of(lettuce))));
+            recipes.add(new Recipe("Pizza", "Classic Margherita", 25,
+                    new ArrayList<>(List.of(cheese, dough)), user1));
+            recipes.add(new Recipe("Burger", "Cheeseburger", 20,
+                    new ArrayList<>(List.of(cheese, lettuce)), user1));
+            recipes.add(new Recipe("Salad", "Fresh salad", 10,
+                    new ArrayList<>(List.of(lettuce)), user1));
         } catch (InvalidRecipeException e) {
             System.err.println("Error creating recipe: " + e.getMessage());
         }

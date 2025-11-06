@@ -27,7 +27,7 @@ public class UserRepository {
     };
 
     public List<User> findAll() {
-        String sql = "SELECT * FROM users WHERE active = TRUE";
+        String sql = "SELECT * FROM users";
         return jdbc.query(sql, mapper);
     }
 

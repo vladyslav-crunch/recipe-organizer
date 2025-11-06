@@ -30,10 +30,6 @@ public class RecipeService {
         repo.update(id, recipe);
     }
 
-    public void deactivate(int id) {
-        repo.softDelete(id);
-    }
-
     public void delete(int id) {
         repo.deletePermanent(id);
     }

@@ -35,18 +35,17 @@ public class RecipeRepository {
 
     public List<Recipe> findAll() {
         String sql = """
-            SELECT r.id, r.name, r.description, r.preparation_time, r.user_id, r.active,
+            SELECT r.id, r.name, r.description, r.preparation_time, r.user_id,
                    u.username AS user_name, u.email AS user_email
             FROM recipes r
             LEFT JOIN users u ON r.user_id = u.id
-            WHERE r.active = TRUE
             """;
         return jdbc.query(sql, recipeMapper);
     }
 
     public Optional<Recipe> findById(int id) {
         String sql = """
-            SELECT r.id, r.name, r.description, r.preparation_time, r.user_id, r.active,
+            SELECT r.id, r.name, r.description, r.preparation_time, r.user_id,
                    u.username AS user_name, u.email AS user_email
             FROM recipes r
             LEFT JOIN users u ON r.user_id = u.id
@@ -57,7 +56,7 @@ public class RecipeRepository {
     }
 
     public int save(Recipe recipe) {
-        String sql = "INSERT INTO recipes (name, description, preparation_time, user_id, active) VALUES (?, ?, ?, ?, TRUE)";
+        String sql = "INSERT INTO recipes (name, description, preparation_time, user_id) VALUES (?, ?, ?, ?)";
         return jdbc.update(sql,
                 recipe.getName(),
                 recipe.getDescription(),
@@ -69,11 +68,6 @@ public class RecipeRepository {
     public int update(int id, Recipe recipe) {
         String sql = "UPDATE recipes SET name=?, description=?, preparation_time=? WHERE id=?";
         return jdbc.update(sql, recipe.getName(), recipe.getDescription(), recipe.getPreparationTime(), id);
-    }
-
-    public int softDelete(int id) {
-        String sql = "UPDATE recipes SET active = FALSE WHERE id=?";
-        return jdbc.update(sql, id);
     }
 
     public int deletePermanent(int id) {

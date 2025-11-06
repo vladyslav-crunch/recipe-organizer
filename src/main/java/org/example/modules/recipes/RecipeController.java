@@ -40,12 +40,6 @@ public class RecipeController {
         return ResponseEntity.ok("Recipe updated");
     }
 
-    @PatchMapping("/{id}/deactivate")
-    public ResponseEntity<String> deactivate(@PathVariable int id) {
-        service.deactivate(id);
-        return ResponseEntity.ok("Recipe deactivated");
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable int id) {
         service.delete(id);

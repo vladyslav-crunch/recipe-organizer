@@ -1,6 +1,7 @@
 package org.example.entity;
 
 import lombok.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
@@ -8,9 +9,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
+@Entity
+@Table(name = "users")
 public class User implements Serializable {
 
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @NonNull
     private String username;
@@ -23,7 +28,6 @@ public class User implements Serializable {
 
     private boolean active = true;
 
-    private List<Recipe> recipes;
 
     @Override
     public String toString() {

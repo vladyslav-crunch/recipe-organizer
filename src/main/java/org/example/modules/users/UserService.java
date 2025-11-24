@@ -23,19 +23,23 @@ public class UserService {
         return repo.findById(id);
     }
 
-    public void create(User user) {
-        repo.save(user);
+    public User create(User user) {
+        return repo.save(user);
     }
 
-    public void update(int id, User user) {
-        repo.update(id, user);
+    public User update(int id, User user) {
+        user.setId(id);
+        return repo.save(user);
     }
 
     public void deactivate(int id) {
-        repo.softDelete(id);
+        repo.findById(id).ifPresent(u -> {
+            u.setActive(false);
+            repo.save(u);
+        });
     }
 
     public void delete(int id) {
-        repo.deletePermanent(id);
+        repo.deleteById(id);
     }
 }

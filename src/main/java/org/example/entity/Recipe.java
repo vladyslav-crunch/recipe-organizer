@@ -1,24 +1,29 @@
 package org.example.entity;
 
-import lombok.*;
-
+import jakarta.persistence.*;
+import lombok.Data;
 
 @Data
-@NoArgsConstructor
-@RequiredArgsConstructor
+@Entity
+@Table(name = "recipes")
 public class Recipe {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NonNull
     private String name;
+
     private String description;
+
+    @Column(name = "preparation_time")
     private int preparationTime;
 
-    @NonNull
-    private Integer userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @NonNull
-    private Integer categoryId;
-
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 }
-

@@ -1,6 +1,7 @@
 package org.example.modules.recipes;
 
-import org.example.entity.Recipe;
+import org.example.dto.RecipeRequestDTO;
+import org.example.dto.RecipeResponseDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,32 +18,29 @@ public class RecipeController {
     }
 
     @GetMapping
-    public List<Recipe> getAll() {
+    public List<RecipeResponseDTO> getAll() {
         return service.getAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Recipe> getById(@PathVariable int id) {
+    public ResponseEntity<RecipeResponseDTO> getById(@PathVariable int id) {
         return service.getById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody Recipe recipe) {
-        service.create(recipe);
-        return ResponseEntity.ok("Recipe created");
+    public RecipeResponseDTO create(@RequestBody RecipeRequestDTO dto) {
+        return service.create(dto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable int id, @RequestBody Recipe recipe) {
-        service.update(id, recipe);
-        return ResponseEntity.ok("Recipe updated");
+    public RecipeResponseDTO update(@PathVariable int id, @RequestBody RecipeRequestDTO dto) {
+        return service.update(id, dto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable int id) {
+    public void delete(@PathVariable int id) {
         service.delete(id);
-        return ResponseEntity.ok("Recipe deleted permanently");
     }
 }

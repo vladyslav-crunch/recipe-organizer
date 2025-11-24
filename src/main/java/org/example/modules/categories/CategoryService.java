@@ -1,5 +1,4 @@
 package org.example.modules.categories;
-
 import org.example.entity.Category;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +18,7 @@ public class CategoryService {
     }
 
     public Category getById(int id) {
-        return repo.findById(id);
+        return repo.findById(id).orElse(null);
     }
 
     public Category create(Category category) {
@@ -27,10 +26,10 @@ public class CategoryService {
     }
 
     public Category update(Category category) {
-        return repo.update(category);
+        return repo.save(category);
     }
 
-    public Category delete(int id) {
-        return repo.delete(id);
+    public void delete(int id) {
+        repo.deleteById(id);
     }
 }

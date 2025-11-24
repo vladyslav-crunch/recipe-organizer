@@ -1,12 +1,9 @@
 package org.example.entity;
 
-import lombok.*;
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@RequiredArgsConstructor
 @Entity
 @Table(name = "categories")
 public class Category {
@@ -15,8 +12,5 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NonNull
     private String name;
-
-    private String description;
 }

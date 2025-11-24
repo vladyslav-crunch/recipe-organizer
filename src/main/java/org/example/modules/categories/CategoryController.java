@@ -24,24 +24,23 @@ public class CategoryController {
     @GetMapping("/{id}")
     public ResponseEntity<Category> getById(@PathVariable int id) {
         Category category = service.getById(id);
-        if (category != null) return ResponseEntity.ok(category);
-        return ResponseEntity.notFound().build();
+        return category != null ? ResponseEntity.ok(category)
+                : ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public ResponseEntity<Category> create(@RequestBody Category category) {
-        return ResponseEntity.ok(service.create(category));
+    public Category create(@RequestBody Category category) {
+        return service.create(category);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> update(@PathVariable int id, @RequestBody Category category) {
+    public Category update(@PathVariable int id, @RequestBody Category category) {
         category.setId(id);
-        return ResponseEntity.ok(service.update(category));
+        return service.update(category);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable int id) {
+    public void delete(@PathVariable int id) {
         service.delete(id);
-        return ResponseEntity.ok("Category deleted");
     }
 }

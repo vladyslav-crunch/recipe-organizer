@@ -29,26 +29,22 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody User user) {
-        service.create(user);
-        return ResponseEntity.ok("User created");
+    public User create(@RequestBody User user) {
+        return service.create(user);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable int id, @RequestBody User user) {
-        service.update(id, user);
-        return ResponseEntity.ok("User updated");
+    public User update(@PathVariable int id, @RequestBody User user) {
+        return service.update(id, user);
     }
 
     @PatchMapping("/{id}/deactivate")
-    public ResponseEntity<String> deactivate(@PathVariable int id) {
+    public void deactivate(@PathVariable int id) {
         service.deactivate(id);
-        return ResponseEntity.ok("User deactivated");
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable int id) {
+    public void delete(@PathVariable int id) {
         service.delete(id);
-        return ResponseEntity.ok("User deleted permanently");
     }
 }

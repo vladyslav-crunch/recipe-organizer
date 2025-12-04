@@ -7,6 +7,7 @@ import org.example.entity.Recipe;
 import org.example.entity.User;
 import org.example.modules.categories.CategoryRepository;
 import org.example.modules.users.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,12 +43,11 @@ public class RecipeService {
         recipe.setDescription(dto.getDescription());
         recipe.setPreparationTime(dto.getPreparationTime());
 
-        // set user
-        User user = userRepo.findById(dto.getUserId())
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepo.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         recipe.setUser(user);
 
-        // set category
         Category category = categoryRepo.findById(dto.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
         recipe.setCategory(category);
@@ -63,13 +63,7 @@ public class RecipeService {
         recipe.setDescription(dto.getDescription());
         recipe.setPreparationTime(dto.getPreparationTime());
 
-        // update user and category if provided
-        if (dto.getUserId() != null) {
-            User user = userRepo.findById(dto.getUserId())
-                    .orElseThrow(() -> new RuntimeException("User not found"));
-            recipe.setUser(user);
-        }
-
+        // Only allow updating category, user stays same
         if (dto.getCategoryId() != null) {
             Category category = categoryRepo.findById(dto.getCategoryId())
                     .orElseThrow(() -> new RuntimeException("Category not found"));

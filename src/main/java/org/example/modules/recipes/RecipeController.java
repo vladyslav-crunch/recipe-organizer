@@ -3,6 +3,7 @@ package org.example.modules.recipes;
 import org.example.dto.RecipeRequestDTO;
 import org.example.dto.RecipeResponseDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,16 +31,19 @@ public class RecipeController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('RECIPE_CREATE')")
     public RecipeResponseDTO create(@RequestBody RecipeRequestDTO dto) {
         return service.create(dto);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('RECIPE_UPDATE')")
     public RecipeResponseDTO update(@PathVariable int id, @RequestBody RecipeRequestDTO dto) {
         return service.update(id, dto);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('RECIPE_DELETE')")
     public void delete(@PathVariable int id) {
         service.delete(id);
     }

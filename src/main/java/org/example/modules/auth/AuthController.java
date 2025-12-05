@@ -6,11 +6,14 @@ import org.example.entity.User;
 import org.example.modules.roles.RoleRepository;
 import org.example.modules.users.UserRepository;
 import org.example.security.JwtTokenProvider;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -39,26 +42,34 @@ public class AuthController {
 
     @PostMapping("/login")
     public LoginResponseDTO login(@RequestBody LoginRequestDTO req) {
-        Authentication authentication = authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword())
-        );
+        try {
+            Authentication authentication = authManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword())
+            );
 
-        org.springframework.security.core.userdetails.User userDetails =
-                (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+            org.springframework.security.core.userdetails.User userDetails =
+                    (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
 
-        var authorities = userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+            var authorities = userDetails.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toList());
 
-        String token = tokenProvider.createToken(userDetails.getUsername(), authorities);
+            String token = tokenProvider.createToken(userDetails.getUsername(), authorities);
 
-        LoginResponseDTO resp = new LoginResponseDTO();
-        resp.setToken(token);
-        return resp;
+            LoginResponseDTO resp = new LoginResponseDTO();
+            resp.setToken(token);
+            return resp;
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password");
+        }
     }
 
     @PostMapping("/register")
     public LoginResponseDTO register(@RequestBody User user) {
+
+        if(userRepository.existsByUsername(user.getUsername())){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Username already exists");
+        }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 

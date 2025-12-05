@@ -5,6 +5,7 @@ public enum Permission {
     USER_UPDATE,
     USER_DELETE,
     USER_VIEW,
+    USER_CREATE,
     RECIPE_CREATE,
     RECIPE_UPDATE,
     RECIPE_DELETE,
